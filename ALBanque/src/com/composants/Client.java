@@ -36,7 +36,7 @@ public class Client {
 		this.numeroDeClient = sClientID;
 	}
 	public String toString() {
-		String str = new String(this.nom + " " + this.prenom + " " + this.numeroDeClient);
+		String str = this.nom + " " + this.prenom + " " + this.numeroDeClient;
 		return str;
 	}
 }

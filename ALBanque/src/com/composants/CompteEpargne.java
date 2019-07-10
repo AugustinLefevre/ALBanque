@@ -1,16 +1,11 @@
-//1.2.1 Création de la classe Compte
+// 1.2.2 Création des classes CompteEpargne
 package com.composants;
 
-public abstract class Compte {
-	protected String libelle;
-	protected double solde;
-	protected int numeroDeCompte;
-	protected Client cli;
-	
-	public Compte(String lib, int CompteID) {
-		this.libelle = lib;
-		this.numeroDeCompte = CompteID;
-		
+public class CompteEpargne extends Compte {
+	//public String libelle;
+	public CompteEpargne(String libelle, int CompteID) {
+		super(libelle, CompteID);
+	//	this.libelle = libelle;
 	}
 	public String getLibelle() {
 		return this.libelle;
@@ -37,7 +32,9 @@ public abstract class Compte {
 		this.cli = cli;
 	}
 	public String toString() {
-		String str = new String(this.libelle + " " + this.numeroDeCompte + " " + this.solde);
+		String str = this.libelle + " compte epargne " + this.numeroDeCompte + " " + this.solde ;
 		return str;
 	}
+
 }
+
