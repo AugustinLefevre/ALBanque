@@ -28,7 +28,17 @@ public abstract class Compte {
 		this.libelle = lib;
 	}
 	public void setSolde(Flux flu) {
-		this.solde = solde;
+		if(flu.getClass().getName() == "com.composants.Credit") {
+			this.solde += flu.getCost();
+		}else if (flu.getClass().getName() == "com.composants.Debit") {
+			this.solde -= flu.getCost();
+		}else {
+			if(this.numeroDeCompte == flu.getIDComptCible()) {
+				this.solde += flu.getCost();
+			} else if(this.numeroDeCompte == flu.getID()) {
+				this.solde -= flu.getCost();
+			}
+		}
 	}
 	public void setNumeroDeCompte(int CompteID) {
 		this.numeroDeCompte = CompteID;
