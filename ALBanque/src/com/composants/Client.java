@@ -8,10 +8,10 @@ public class Client {
 	private static int nbDeClient = 0;
 	
 	public Client(String cNom, String cPrenom) {
-		nom = cNom;
-		prenom = cPrenom;
+		this.nom = cNom;
+		this.prenom = cPrenom;
 		nbDeClient++;
-		numeroDeClient = nbDeClient;
+		this.numeroDeClient = nbDeClient;
 	}
 	public String getName() {
 		return this.nom;
@@ -26,17 +26,17 @@ public class Client {
 		return nbDeClient;
 	}
 	public void setName(String sName) {
-		nom = sName;
+		this.nom = sName;
 	}
 	public void setLastName(String sPrenom) {
-		prenom = sPrenom;
+		this.prenom = sPrenom;
 	}
 	public void setClientID(int sClientID) {
 		// Check if the id was not already used
-		numeroDeClient = sClientID;
+		this.numeroDeClient = sClientID;
 	}
 	public String toString() {
-		String str = new String(this.nom + " " + this.prenom + " " + numeroDeClient);
+		String str = new String(this.nom + " " + this.prenom + " " + this.numeroDeClient);
 		return str;
 	}
 }
