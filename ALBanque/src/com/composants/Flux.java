@@ -7,18 +7,19 @@ public abstract class Flux {
 	private double montant;
 	private int numeroDeCompteCible;
 	boolean effectue;
-	Date dateDuFlux;
+	java.util.Date dateDuFlux;
 	
 	public Flux(){
-		System.out.println("need arguments(commentaire, identifiant, montant, numeroDeCompteCible, done, dateDuFlux)");
+		System.out.println("need bla arguments(commentaire, identifiant, montant, numeroDeCompteCible, done, dateDuFlux)");
 	}
-	public Flux(String comment,int id,double cost,int IDCompteCible,boolean done,Date dateDuFlux){
+	public Flux(String comment,int id,double cost,int IDCompteCible,boolean done,java.util.Date date){
 		this.commentaire = comment;
 		this.identifiant = id;
 		this.montant = cost;
 		this.numeroDeCompteCible = IDCompteCible;
 		this.effectue = done;
-		this.dateDuFlux = dateDuFlux;
+		this.dateDuFlux = date;
+		System.out.println("is ok");
 	}
 	public String getComment() {
 		return this.commentaire;
@@ -36,7 +37,7 @@ public abstract class Flux {
 		return this.effectue;
 	}
 	public Date getDate() {
-		return this.dateDuFlux;
+		return (Date) this.dateDuFlux;
 	}
 	public void setComment(String str) {
 		this.commentaire = str;
@@ -55,5 +56,9 @@ public abstract class Flux {
 	}
 	public void setDate(Date d) {
 		this.dateDuFlux = d;
+	}
+	public String toString() {
+		String str = new String("comment : " + this.commentaire + " id : " + this.identifiant + " mount : " + this.montant + " compte cible : " + this.numeroDeCompteCible + " done : " + this.effectue + " date : " + this.dateDuFlux);
+		return str;
 	}
 }

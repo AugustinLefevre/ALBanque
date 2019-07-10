@@ -5,7 +5,7 @@ public class CompteCourant extends Compte {
 	//public String libelle;
 	public CompteCourant(String libelle, int CompteID) {
 		super(libelle, CompteID);
-		//this.libelle = libelle;
+		this.libelle = "Compte courant";
 	}
 	public String getLibelle() {
 		return this.libelle;
@@ -32,7 +32,7 @@ public class CompteCourant extends Compte {
 		this.cli = cli;
 	}
 	public String toString() {
-		String str = this.libelle + " compte courant" + " " + this.numeroDeCompte + " " + this.solde;
+		String str = this.libelle + " " + this.numeroDeCompte + " " + this.solde;
 		return str;
 	}
 

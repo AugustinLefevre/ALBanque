@@ -27,7 +27,7 @@ public abstract class Compte {
 	public void setLibelle(String lib) {
 		this.libelle = lib;
 	}
-	public void setSolde(double solde) {
+	public void setSolde(Flux flu) {
 		this.solde = solde;
 	}
 	public void setNumeroDeCompte(int CompteID) {
