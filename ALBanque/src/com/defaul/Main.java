@@ -22,6 +22,17 @@ import java.util.Collections;
 import java.util.Hashtable;
 import com.composants.*;
 
+
+
+import java.io.File;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.DocumentBuilder;
+import org.w3c.dom.Document;
+import org.w3c.dom.NodeList;
+import org.w3c.dom.Node;
+import org.w3c.dom.Element;
+
+
 public class Main {
 
 	private static Client[] collection = generateClient(2);
@@ -52,16 +63,14 @@ public class Main {
 		
 		// 1.3.5 Mise à jour des comptes
 		MAJComptes(flux, hashtable);
-		
 		showCompte(comptCollection);
-		
-	
+		// 2 GESTION DES COMPTES
 		readJson();
-
 		for(Flux f : flux) {
 			System.out.println(f);
 		}
-		
+		readXML();
+		showCompte(comptCollection);
 	}
 	
 	public static Client[] generateClient(int nbGenerate) {
@@ -155,20 +164,18 @@ public class Main {
         return test;
 	}
 	public static void readJson() {
-	JSONParser parser = new JSONParser();
-	String path = getPath().toString();
-	try (Reader reader = new FileReader(path)) {
-		
-		JSONObject jsonObject = (JSONObject) parser.parse(reader);
-
-		for (Integer i = 1; i <= jsonObject.size(); i++) {
-			String elName = "el" + i.toString();
-			JSONObject data = (JSONObject) jsonObject.get(elName);
-			String fluxType =  (String) data.get("fluxType");
-			String comm =  (String) data.get("commentaire");
-			double mount =  (double) data.get("montant");
-			Long id = (Long) data.get("identifiant");
-			flux = addFluxInTab(fluxType, comm, mount, id.intValue(), flux, data.get("compteDebit"));
+		JSONParser parser = new JSONParser();
+		String path = getPath().toString();
+		try (Reader reader = new FileReader(path)) {
+			JSONObject jsonObject = (JSONObject) parser.parse(reader);
+			for (Integer i = 1; i <= jsonObject.size(); i++) {
+				String elName = "el" + i.toString();
+				JSONObject data = (JSONObject) jsonObject.get(elName);
+				String fluxType =  (String) data.get("fluxType");
+				String comm =  (String) data.get("commentaire");
+				double mount =  (double) data.get("montant");
+				Long id = (Long) data.get("identifiant");
+				flux = addFluxInTab(fluxType, comm, mount, id.intValue(), flux, data.get("compteDebit"));
 		}
 		
 		
@@ -176,4 +183,52 @@ public class Main {
         e.printStackTrace();
 		}
 	}
+	public static void readXML() {
+		try {
+	         File inputFile = new File("src/DataFile.xml");
+	         DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+	         DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+	         Document doc = dBuilder.parse(inputFile);
+	         doc.getDocumentElement().normalize();
+	         System.out.println("Root element :" + doc.getDocumentElement().getNodeName());
+	         NodeList nList = doc.getElementsByTagName("compte");
+	         System.out.println("----------------------------");
+	         Compte compte;
+	         
+	         for (int temp = 0; temp < nList.getLength(); temp++) {
+	            Node nNode = nList.item(temp);
+	            System.out.println("\nCurrent Element :" + nNode.getNodeName());
+	            
+	            if (nNode.getNodeType() == Node.ELEMENT_NODE) {
+	               Element eElement = (Element) nNode;
+	               
+	               String name = eElement.getElementsByTagName("nom").item(0).getTextContent();
+	               String id = eElement.getElementsByTagName("numeroDeCompte").item(0).getTextContent();
+	               if(eElement.getAttribute("type").equals("1"))
+	            	   compte = new CompteCourant(name, Integer.parseInt(id));
+	               else
+	            	   compte = new CompteEpargne(name, Integer.parseInt(id));
+	               compte.setLibelle(eElement.getElementsByTagName("libelle").item(0).getTextContent());
+	               compte.setSolde(Double.parseDouble(eElement.getElementsByTagName("solde").item(0).getTextContent()));
+	               comptCollection = updateComptArray(comptCollection, compte );
+
+	            }
+	         }
+	      } catch (Exception e) {
+	         e.printStackTrace();
+	      }
+	}
+	
+	public static Compte[] updateComptArray(Compte[] comptes, Compte compte ) {
+		
+		Compte[] cpt = new Compte[comptes.length + 1];
+		int i = 0;
+		for(Compte c : comptes) {
+			cpt[i] = c;
+			i++;
+		}
+		cpt[i] = compte;
+		return cpt;
+	}
+	  
 }
