@@ -1,6 +1,8 @@
 package com.composants;
 import java.sql.Date;
 
+
+
 public abstract class Flux {
 	private String commentaire;
 	private int identifiant;
@@ -21,6 +23,7 @@ public abstract class Flux {
 		this.numeroDeCompteCible = IDCompteCible;
 		this.effectue = done;
 		this.dateDuFlux = date;
+		System.out.println("creation du flux");
 	}
 	public String getComment() {
 		return this.commentaire;
@@ -66,4 +69,5 @@ public abstract class Flux {
 		String str = new String("comment : " + this.commentaire + " id : " + this.identifiant + " mount : " + this.montant + " compte cible : " + this.numeroDeCompteCible + " done : " + this.effectue + " date : " + this.dateDuFlux);
 		return str;
 	}
+
 }

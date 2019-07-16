@@ -1,9 +1,23 @@
 
 package com.defaul;
 import java.util.Date;
+import java.io.FileReader;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
+import org.json.*;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.ParseException;
+
+import java.io.Reader;
+import java.util.Iterator;
+import java.util.concurrent.TimeUnit;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Hashtable;
 import com.composants.*;
@@ -32,6 +46,7 @@ public class Main {
 			if(tab.getClass().getName() == "com.composants.CompteEpargne")
 			 flux = addFluxInTab("credit", "blabla", 1500, tab.getNumeroDeCompte(), flux);
 		}
+	
 		flux = addFluxInTab("virement", "debittest", 50, 2,flux, hashtable.get("0"));
 		
 		
@@ -39,6 +54,13 @@ public class Main {
 		MAJComptes(flux, hashtable);
 		
 		showCompte(comptCollection);
+		
+	
+		readJson();
+
+		for(Flux f : flux) {
+			System.out.println(f);
+		}
 		
 	}
 	
@@ -109,20 +131,49 @@ public class Main {
 		DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
 		Date date = new Date();
 		int id = idClient;
-		if(fluxType == "virement") {
+		if(fluxType.equals("virement")) {
 			tab[i] = new Virement(comment, id - 1, mount, idClient, true, date, compteDebit);
+		} else if(fluxType.equals("debit")) {
+			tab[i] = new Debit(comment, idClient - 1, mount, idClient, true, date);
+		}
+		else if(fluxType.equals("credit")) {
+			tab[i] = new Credit(comment, idClient - 1, mount, idClient, true, date);
 		}
 		return tab;
 	}
 	public static void MAJComptes(Flux[] flux, Hashtable tab) {
 		for(Flux flu : flux) {
-			System.out.println( flu);
-			System.out.println( flu.getID());
 			Integer i = flu.getID();
 			Compte j = flu.getNBCompteEmeteur();
-			
 			Compte cpt = (Compte)tab.get(i.toString());
 			cpt.setSolde(flu);
+		}
+	}
+	public static Path getPath() {
+        Path test = Paths.get("src/jsonData.json");
+        System.out.println(test.toAbsolutePath());
+        return test;
+	}
+	public static void readJson() {
+	JSONParser parser = new JSONParser();
+	String path = getPath().toString();
+	try (Reader reader = new FileReader(path)) {
+		
+		JSONObject jsonObject = (JSONObject) parser.parse(reader);
+
+		for (Integer i = 1; i <= jsonObject.size(); i++) {
+			String elName = "el" + i.toString();
+			JSONObject data = (JSONObject) jsonObject.get(elName);
+			String fluxType =  (String) data.get("fluxType");
+			String comm =  (String) data.get("commentaire");
+			double mount =  (double) data.get("montant");
+			Long id = (Long) data.get("identifiant");
+			flux = addFluxInTab(fluxType, comm, mount, id.intValue(), flux, data.get("compteDebit"));
+		}
+		
+		
+	} catch (Exception e) {
+        e.printStackTrace();
 		}
 	}
 }
