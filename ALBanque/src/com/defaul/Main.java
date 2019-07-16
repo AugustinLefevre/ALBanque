@@ -34,9 +34,6 @@ public class Main {
 		}
 		flux = addFluxInTab("virement", "debittest", 50, 2,flux, hashtable.get("0"));
 		
-//		for(Flux fl : flux) {
-//			System.out.println("ddddddddddddddddd"+ fl);
-//		}
 		
 		// 1.3.5 Mise à jour des comptes
 		MAJComptes(flux, hashtable);
@@ -87,7 +84,6 @@ public class Main {
 		System.out.println(Collections.singletonList(tab));
 	}
 	public static Flux[] addFluxInTab(String fluxType,String comment, double mount, int idClient, Flux[] flux) {
-		//System.out.println(flux.length);
 		Flux[] tab = new Flux[flux.length + 1];
 		int i = 0;
 		for(Flux flu : flux) {
@@ -125,20 +121,8 @@ public class Main {
 			Integer i = flu.getID();
 			Compte j = flu.getNBCompteEmeteur();
 			
-//			System.out.println("i" +i.toString());
 			Compte cpt = (Compte)tab.get(i.toString());
-		//	Compte cptEmeteur = (Compte)tab.get(i.toString());
 			cpt.setSolde(flu);
-		//	System.out.println(j);
-
-			//j.setSolde(flu);
-			//cptEmeteur.setSolde(flu);
-
-//			 
-//			System.out.println(cpt);
-//			System.out.println(flu);
-//			 }
-//			 cpt.setSolde(flu);
 		}
 	}
 }
