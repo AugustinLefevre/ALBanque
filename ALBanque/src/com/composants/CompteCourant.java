@@ -2,10 +2,8 @@
 package com.composants;
 
 public class CompteCourant extends Compte {
-	//public String libelle;
 	public CompteCourant(String libelle, int CompteID) {
 		super(libelle, CompteID);
-		this.libelle = "Compte courant";
 	}
 	public String getLibelle() {
 		return this.libelle;
@@ -23,7 +21,7 @@ public class CompteCourant extends Compte {
 		this.libelle = lib;
 	}
 	public void setSolde(double solde) {
-		this.solde = solde;
+		this.solde += solde;
 	}
 	public void setNumeroDeCompte(int CompteID) {
 		this.numeroDeCompte = CompteID;
@@ -32,7 +30,7 @@ public class CompteCourant extends Compte {
 		this.cli = cli;
 	}
 	public String toString() {
-		String str = this.libelle + " " + this.numeroDeCompte + " " + this.solde;
+		String str = this.libelle + " :comte courant " + this.numeroDeCompte + " " + this.solde;
 		return str;
 	}
 

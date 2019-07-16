@@ -25,20 +25,24 @@ public class Main {
 		//1.3.4 Création du tableau des flux
 		flux = addFluxInTab("debit", "debittest", 50, 1,flux);
 		for(Compte tab : comptCollection) {
-			if(tab.getLibelle() == "Compte courant")
+			if(tab.getClass().getName() == "com.composants.CompteCourant")
 			 flux = addFluxInTab("credit", "blabla", 100.50, tab.getNumeroDeCompte(), flux);
 		}
 		for(Compte tab : comptCollection) {
-			if(tab.getLibelle() == "Compte epargne")
+			if(tab.getClass().getName() == "com.composants.CompteEpargne")
 			 flux = addFluxInTab("credit", "blabla", 1500, tab.getNumeroDeCompte(), flux);
 		}
-		flux = addFluxInTab("virement", "debittest", 50, 2,flux, 1);
-		// affichage flux
-		for(Flux tab : flux) {
-			if(tab.getClass().getName() == "com.composants.Debit")
-			System.out.println("kdmalfkmakvmzakvkz");
-			System.out.println(tab.toString());
-		}
+		flux = addFluxInTab("virement", "debittest", 50, 2,flux, hashtable.get("0"));
+		
+//		for(Flux fl : flux) {
+//			System.out.println("ddddddddddddddddd"+ fl);
+//		}
+		
+		// 1.3.5 Mise à jour des comptes
+		MAJComptes(flux, hashtable);
+		
+		showCompte(comptCollection);
+		
 	}
 	
 	public static Client[] generateClient(int nbGenerate) {
@@ -59,8 +63,8 @@ public class Main {
 		Compte[] tab = new Compte[clients.length * 2];
 		int i = 0;
 		for(Client cli : clients) {
-			tab[i] = new CompteCourant(cli.getName(), i);
-			tab[i + 1] = new CompteEpargne(cli.getName(), i+1);
+			tab[i] = new CompteCourant(cli.getName(), cli.getClientID());
+			tab[i + 1] = new CompteEpargne(cli.getName(), cli.getClientID());
 			i+=2;
 		}
 		return tab;
@@ -83,7 +87,7 @@ public class Main {
 		System.out.println(Collections.singletonList(tab));
 	}
 	public static Flux[] addFluxInTab(String fluxType,String comment, double mount, int idClient, Flux[] flux) {
-		System.out.println(flux.length);
+		//System.out.println(flux.length);
 		Flux[] tab = new Flux[flux.length + 1];
 		int i = 0;
 		for(Flux flu : flux) {
@@ -92,14 +96,14 @@ public class Main {
 		}
 		DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
 		Date date = new Date();
-		int id = (int) (1 + mount + idClient);
+		int id = idClient;
 		if(fluxType == "debit")
-			tab[i] = new Debit(comment, id, mount, idClient, true, date);
+			tab[i] = new Debit(comment, idClient - 1, mount, idClient, true, date);
 		else if(fluxType == "credit")
-			tab[i] = new Credit(comment, id, mount, idClient, true, date);
+			tab[i] = new Credit(comment, idClient - 1, mount, idClient, true, date);
 		return tab;
 	}
-	public static Flux[] addFluxInTab(String fluxType,String comment, double mount, int idClient, Flux[] flux, int compteDebit) {
+	public static Flux[] addFluxInTab(String fluxType,String comment, double mount, int idClient, Flux[] flux, Object compteDebit) {
 		Flux[] tab = new Flux[flux.length + 1];
 		int i = 0;
 		for(Flux flu : flux) {
@@ -108,10 +112,33 @@ public class Main {
 		}
 		DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
 		Date date = new Date();
-		int id = (int) (1 + mount + idClient);
-		if(fluxType == "virement") 
-			tab[i] = new Virement(comment, id, mount, idClient, true, date, compteDebit);
+		int id = idClient;
+		if(fluxType == "virement") {
+			tab[i] = new Virement(comment, id - 1, mount, idClient, true, date, compteDebit);
+		}
 		return tab;
+	}
+	public static void MAJComptes(Flux[] flux, Hashtable tab) {
+		for(Flux flu : flux) {
+			System.out.println( flu);
+			System.out.println( flu.getID());
+			Integer i = flu.getID();
+			Compte j = flu.getNBCompteEmeteur();
+			
+//			System.out.println("i" +i.toString());
+			Compte cpt = (Compte)tab.get(i.toString());
+		//	Compte cptEmeteur = (Compte)tab.get(i.toString());
+			cpt.setSolde(flu);
+		//	System.out.println(j);
 
+			//j.setSolde(flu);
+			//cptEmeteur.setSolde(flu);
+
+//			 
+//			System.out.println(cpt);
+//			System.out.println(flu);
+//			 }
+//			 cpt.setSolde(flu);
+		}
 	}
 }

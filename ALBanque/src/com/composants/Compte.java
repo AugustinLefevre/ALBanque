@@ -5,11 +5,14 @@ public abstract class Compte {
 	protected String libelle;
 	protected double solde;
 	protected int numeroDeCompte;
+	protected static int nbCompte = 0;
+
 	protected Client cli;
 	
 	public Compte(String lib, int CompteID) {
 		this.libelle = lib;
-		this.numeroDeCompte = CompteID;
+		nbCompte++;
+		this.numeroDeCompte = nbCompte;
 		
 	}
 	public String getLibelle() {
@@ -27,17 +30,24 @@ public abstract class Compte {
 	public void setLibelle(String lib) {
 		this.libelle = lib;
 	}
+	public void setSolde(double i) {
+
+	}
 	public void setSolde(Flux flu) {
 		if(flu.getClass().getName() == "com.composants.Credit") {
 			this.solde += flu.getCost();
 		}else if (flu.getClass().getName() == "com.composants.Debit") {
 			this.solde -= flu.getCost();
 		}else {
+
 			if(this.numeroDeCompte == flu.getIDComptCible()) {
 				this.solde += flu.getCost();
-			} else if(this.numeroDeCompte == flu.getID()) {
-				this.solde -= flu.getCost();
+				flu.getNBCompteEmeteur().setSolde(flu.getCost() * -1);		
 			}
+//			else if(flu.getNBCompteEmeteur().getNumeroDeCompte() == this.numeroDeCompte) {
+//				System.out.println(flu.getNBCompteEmeteur().getNumeroDeCompte());
+//
+//			}
 		}
 	}
 	public void setNumeroDeCompte(int CompteID) {
